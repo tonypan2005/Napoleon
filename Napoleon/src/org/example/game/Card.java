@@ -20,6 +20,16 @@ public class Card {
 		return text;
 	}
 	
+	public void setValue(int value)
+	{
+		this.value = value;
+	}
+	
+	public void setString(String text)
+	{
+		this.text = text;
+	}
+	
 	public String toString()
 	{
 		switch(value)
