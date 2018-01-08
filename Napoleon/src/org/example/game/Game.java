@@ -3,8 +3,8 @@ package org.example.game;
 import java.util.*;
 
 public class Game {
-	
-	//sorts a player's hand
+
+	// sorts a player's hand
 	public static Card[] sortHand(Card[] hand) {
 		int[] temp = new int[10];
 		for (int k = 0; k < hand.length; k++) {
@@ -32,10 +32,12 @@ public class Game {
 		for (int i = 0; i < temp.length; i++) {
 			int count = 0;
 			int remainder = 0;
-			count = temp[i] / 13;
+			count = (temp[i] - 2) / 13;
 			remainder = temp[i] % 13;
-			if(remainder == 0)
+			if (remainder == 0)
 				remainder = 13;
+			if (remainder == 1)
+				remainder = 14;
 			switch (count) {
 			case 0:
 				hand[i].setValue(remainder);
@@ -63,7 +65,7 @@ public class Game {
 		// set-up deck
 		ArrayList<Card> deck = new ArrayList<Card>();
 		for (int x = 0; x < 4; x++) {
-			for (int y = 1; y <= 13; y++) {
+			for (int y = 2; y <= 14; y++) {
 				switch (x) {
 				case 0:
 					deck.add(new Card(y, "clubs"));
@@ -109,21 +111,38 @@ public class Game {
 		sortHand(player3);
 		sortHand(player4);
 		sortHand(player5);
+
+		// print
 		for (int v = 0; v < 10; v++) {
-			System.out.printf("%s", player1[v].toString());
+			System.out.printf("%-20s", player1[v].toString());
 			System.out.print("\t");
-			System.out.printf("%s", player2[v].toString());
+			System.out.printf("%-20s", player2[v].toString());
 			System.out.print("\t");
-			System.out.printf("%s", player3[v].toString());
+			System.out.printf("%-20s", player3[v].toString());
 			System.out.print("\t");
-			System.out.printf("%s", player4[v].toString());
+			System.out.printf("%-20s", player4[v].toString());
 			System.out.print("\t");
-			System.out.printf("%s", player5[v].toString());
+			System.out.printf("%-20s", player5[v].toString());
 			System.out.println();
 		}
-		
-		
+		System.out.println(baggage[0].toString());
+		System.out.println(baggage[1].toString());
 
 		// game logic
+		Bot p1 = new Bot();
+		ArrayList<Card> pile = new ArrayList<Card>();
+		for (int y = 0; y < 10; y++) {
+			pile.add(p1.play(player1, pile));
+			pile.add(p1.play(player2, pile));
+			pile.add(p1.play(player3, pile));
+			pile.add(p1.play(player4, pile));
+			pile.add(p1.play(player5, pile));
+			System.out.println(pile.get(0));
+			System.out.println(pile.get(1));
+			System.out.println(pile.get(2));
+			System.out.println(pile.get(3));
+			System.out.println(pile.get(4));
+			pile.clear();
+		}
 	}
 }
