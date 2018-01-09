@@ -3,9 +3,10 @@ package org.example.game;
 import java.util.*;
 
 public class Game {
+	static Scanner scan_player = new Scanner(System.in);
 
 	public static Card playCard(Card[] playerHand, ArrayList<Card> pile) {
-		Scanner scan_player = new Scanner(System.in);
+
 		int index = 0;
 		while (true) {
 			System.out.println("Please choose a valid card (0-9):");
@@ -14,6 +15,7 @@ public class Game {
 				if (playerHand[index] != null) {
 					Card temp = playerHand[index];
 					playerHand[index] = null;
+
 					return temp;
 				} else
 					System.out.println("Invalid selection");
@@ -26,14 +28,34 @@ public class Game {
 				if ((playerHand[index] != null) && (playerHand[index].getString().equals(suit))) {
 					Card temp = playerHand[index];
 					playerHand[index] = null;
+
 					return temp;
 				}
 				if (flag == false) {
 
 					if (playerHand[index] != null) {
-						Card temp = playerHand[index];
-						playerHand[index] = null;
-						return temp;
+						if (playerHand[index].getString().equals(suit)) {
+							Card temp = playerHand[index];
+							playerHand[index] = null;
+							return temp;
+						} else {
+							Boolean fl = true;
+							for (int r = 0; r < 10; r++) {
+								if (playerHand[r] == null) {
+									r++;
+								} else {
+									if (playerHand[r].getString().equals(suit)) {
+										fl = false;
+									}
+								}
+							}
+							if (fl) {
+								Card temp = playerHand[index];
+								playerHand[index] = null;
+								return temp;
+							} else
+								System.out.println("Invalid selection");
+						}
 					} else {
 						System.out.println("Invalid selection");
 					}
@@ -257,6 +279,11 @@ public class Game {
 		}
 		sortHand(player1H);
 		System.out.println("Your new hand: ");
+		for (int o = 0; o < 10; o++) {
+			System.out.println(o + ") " + player1H[o].toString());
+		}
+		System.out.println("Who do you want as your secretary (2-12, 13(King), 14(Ace):");
+		int secretary = scan.nextInt();
 
 		Bot p2 = new Bot();
 		Bot p3 = new Bot();
@@ -266,6 +293,13 @@ public class Game {
 
 		int max = 0;
 		int playOrder = 1;
+		int sec_team = 0;
+		int point1 = 0;
+		int point2 = 0;
+		int point3 = 0;
+		int point4 = 0;
+		int point5 = 0;
+		int tempCount = 0;
 		for (int y = 0; y < 10; y++) {
 			switch (playOrder) {
 			case 1:
@@ -281,30 +315,55 @@ public class Game {
 					playOrder = 1;
 				}
 				System.out.println("You played: " + pile.get(0));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is player1 himself/herself.");
+					sec_team = 1;
+				}
 				pile.add(p2.play(player2H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 2;
 				}
 				System.out.println("bot 1 played: " + pile.get(1));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 1.");
+					sec_team = 2;
+				}
 				pile.add(p3.play(player3H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 3;
 				}
 				System.out.println("bot 2 played: " + pile.get(2));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 2.");
+					sec_team = 3;
+				}
 				pile.add(p4.play(player4H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 4;
 				}
 				System.out.println("bot 3 played: " + pile.get(3));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 3.");
+					sec_team = 4;
+				}
 				pile.add(p5.play(player5H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 5;
 				}
 				System.out.println("bot 4 played: " + pile.get(4));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 4.");
+					sec_team = 5;
+				}
 				break;
 			case 2:
 				pile.add(p2.play(player2H, pile));
@@ -313,24 +372,44 @@ public class Game {
 					playOrder = 2;
 				}
 				System.out.println("bot 1 played: " + pile.get(0));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 1.");
+					sec_team = 2;
+				}
 				pile.add(p3.play(player3H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 3;
 				}
 				System.out.println("bot 2 played: " + pile.get(1));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 2.");
+					sec_team = 3;
+				}
 				pile.add(p4.play(player4H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 4;
 				}
 				System.out.println("bot 3 played: " + pile.get(2));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 3.");
+					sec_team = 4;
+				}
 				pile.add(p5.play(player5H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 5;
 				}
 				System.out.println("bot 4 played: " + pile.get(3));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 4.");
+					sec_team = 5;
+				}
 				System.out.println("");
 				for (int v = 0; v < 10; v++) {
 					if (player1H[v] == null)
@@ -344,6 +423,11 @@ public class Game {
 					playOrder = 1;
 				}
 				System.out.println("You played: " + pile.get(4));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is player1 himself/herself.");
+					sec_team = 1;
+				}
 				break;
 			case 3:
 				pile.add(p3.play(player3H, pile));
@@ -352,18 +436,33 @@ public class Game {
 					playOrder = 3;
 				}
 				System.out.println("bot 2 played: " + pile.get(0));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 2.");
+					sec_team = 3;
+				}
 				pile.add(p4.play(player4H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 4;
 				}
 				System.out.println("bot 3 played: " + pile.get(1));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 3.");
+					sec_team = 4;
+				}
 				pile.add(p5.play(player5H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 5;
 				}
 				System.out.println("bot 4 played: " + pile.get(2));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 4.");
+					sec_team = 5;
+				}
 				System.out.println("");
 				for (int v = 0; v < 10; v++) {
 					if (player1H[v] == null)
@@ -377,18 +476,33 @@ public class Game {
 					playOrder = 1;
 				}
 				System.out.println("You played: " + pile.get(3));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is player1 himself/herself.");
+					sec_team = 1;
+				}
 				pile.add(p2.play(player2H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 2;
 				}
 				System.out.println("bot 1 played: " + pile.get(4));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 1.");
+					sec_team = 2;
+				}
 				break;
 			case 4:
 				pile.add(p4.play(player4H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 4;
+				}
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 3.");
+					sec_team = 4;
 				}
 				System.out.println("bot 3 played: " + pile.get(0));
 				pile.add(p5.play(player5H, pile));
@@ -397,6 +511,11 @@ public class Game {
 					playOrder = 5;
 				}
 				System.out.println("bot 4 played: " + pile.get(1));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 4.");
+					sec_team = 5;
+				}
 				System.out.println("");
 				for (int v = 0; v < 10; v++) {
 					if (player1H[v] == null)
@@ -410,18 +529,33 @@ public class Game {
 					playOrder = 1;
 				}
 				System.out.println("You played: " + pile.get(2));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is player1 himself/herself.");
+					sec_team = 1;
+				}
 				pile.add(p2.play(player2H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 2;
 				}
 				System.out.println("bot 1 played: " + pile.get(3));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 1.");
+					sec_team = 2;
+				}
 				pile.add(p3.play(player3H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 3;
 				}
 				System.out.println("bot 2 played: " + pile.get(4));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 2.");
+					sec_team = 3;
+				}
 				break;
 			case 5:
 				pile.add(p5.play(player5H, pile));
@@ -430,6 +564,11 @@ public class Game {
 					playOrder = 5;
 				}
 				System.out.println("bot 4 played: " + pile.get(0));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 4.");
+					sec_team = 5;
+				}
 				System.out.println("");
 				for (int v = 0; v < 10; v++) {
 					if (player1H[v] == null)
@@ -443,24 +582,44 @@ public class Game {
 					playOrder = 1;
 				}
 				System.out.println("You played: " + pile.get(1));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is player1 himself/herself.");
+					sec_team = 1;
+				}
 				pile.add(p2.play(player2H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 2;
 				}
 				System.out.println("bot 1 played: " + pile.get(2));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 1.");
+					sec_team = 2;
+				}
 				pile.add(p3.play(player3H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 3;
 				}
 				System.out.println("bot 2 played: " + pile.get(3));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 2.");
+					sec_team = 3;
+				}
 				pile.add(p4.play(player4H, pile));
 				if (max < finalCardValue(pile.get(0), pile.get(pile.size() - 1), s)) {
 					max = finalCardValue(pile.get(0), pile.get(pile.size() - 1), s);
 					playOrder = 4;
 				}
 				System.out.println("bot 3 played: " + pile.get(4));
+				if (pile.get(pile.size() - 1).getValue() == secretary
+						&& pile.get(pile.size() - 1).getString().equals(s)) {
+					System.out.println("Secretary revealed! It is bot 3.");
+					sec_team = 4;
+				}
 				break;
 			}
 			if (playOrder != 1)
@@ -468,9 +627,55 @@ public class Game {
 			else
 				System.out.println("PLAYER " + playOrder + " TAKES THE POT!");
 			System.out.println("----------------------------");
+			for (int m = 0; m < 5; m++) {
+				if (pile.get(m).getValue() == 11 || pile.get(m).getValue() == 12 || pile.get(m).getValue() == 13
+						|| pile.get(m).getValue() == 14)
+					tempCount++;
+			}
+			switch (playOrder) {
+			case 1:
+				point1 += tempCount;
+				break;
+			case 2:
+				point2 += tempCount;
+				break;
+			case 3:
+				point3 += tempCount;
+				break;
+			case 4:
+				point4 += tempCount;
+				break;
+			case 5:
+				point5 += tempCount;
+				break;
+			}
+			tempCount = 0;
 			pile.clear();
 			max = 0;
 		}
+		switch (sec_team) {
+		case 1:
+			break;
+		case 2:
+			point1 += point2;
+			break;
+		case 3:
+			point1 += point3;
+			break;
+		case 4:
+			point1 += point4;
+			break;
+		case 5:
+			point1 += point5;
+			break;
+		}
+		System.out.println("Score: " + point1);
+		if (point1 >= bid)
+			System.out.println("The player and his secretary wins!");
+		else
+			System.out.println("The player and his secretary loses!");
 		scan.close();
+		sc_string.close();
+		scan_player.close();
 	}
 }
