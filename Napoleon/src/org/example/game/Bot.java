@@ -3,15 +3,6 @@ package org.example.game;
 import java.util.ArrayList;
 
 public class Bot {
-	private int num;
-
-	public Bot(int num) {
-		this.num = num;
-	}
-
-	public int getPlayerNumber() {
-		return num;
-	}
 
 	public Card play(Card[] playerHand, ArrayList<Card> pile) {
 		// play most left
@@ -46,7 +37,6 @@ public class Bot {
 					}
 				}
 			}
-			System.out.println("smile");
 		}
 		// end game
 		Card c = new Card(0, "diamonds");

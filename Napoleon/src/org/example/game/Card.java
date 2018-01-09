@@ -29,7 +29,7 @@ public class Card {
 	public String toString() {
 		switch (value) {
 		case 0:
-			return "Game Over";
+			return "null";
 		case 2:
 			return "two of " + text;
 		case 3:
